@@ -1,4 +1,4 @@
-const VehiclesModule = () => {
+const VehiclesPage = () => {
     return (
         <main className="ModuleContent">
             <h2>Vihecles Module</h2>
@@ -7,4 +7,4 @@ const VehiclesModule = () => {
     )
 }
 
-export default VehiclesModule;
+export default VehiclesPage;
