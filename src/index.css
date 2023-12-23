@@ -230,12 +230,13 @@ body {
   margin-top: 1rem;
 }
 
+.customerTable th , 
 .customerTable td {
   text-align: center;
   padding: 0.25rem;
 }
 
-.customerTable thead td {
+.customerTable thead th {
   font-weight: bold;
   font-size: 17px;
   border: 2px solid;
