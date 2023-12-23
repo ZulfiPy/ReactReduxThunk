@@ -7,7 +7,7 @@ const CustomerTable = () => {
     const customers = useSelector(selectAllCustomers);
 
     return (
-        <form className="tableForm">
+        <form className="tableForm" onSubmit={(event) => event.preventDefault()}>
             <table className="customerTable">
                 <thead>
                     <CustomerHeadRow />
