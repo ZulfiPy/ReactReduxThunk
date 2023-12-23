@@ -1,0 +1,26 @@
+{
+    "customers": [
+      {
+        "id": "0Nq62b02KLvc0NmyoKq6j",
+        "name": "customerName",
+        "surname": "customerSurname",
+        "isikukood": "customerIsikukood",
+        "driverLicenseNumber": "customerDrivingLicenseNumber",
+        "address": "customerAddress",
+        "email": "customerEmail",
+        "phone": "customerPhone"
+      }
+    ],
+    "cars": [
+      {
+        "id": "TMBJH9NE5L0088408",
+        "brand": "Skoda",
+        "model": "Octavia",
+        "plateNumber": "794WDR",
+        "year": 2020,
+        "fuelType": "CNG",
+        "bodyColor": "black"
+  
+      }
+    ]
+  }
