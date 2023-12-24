@@ -1,5 +1,63 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addNewCustomer } from "../features/customersSlice";
+import { nanoid } from "nanoid";
+import getFormattedDate from "../getFormattedDate";
+
 const NewCustomerPage = () => {
-    
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [isikukood, setIsikukood] = useState("");
+    const [driverLicenseNumber, setDriverLicenseNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+
+    const clearInput = () => {
+        setName("");
+        setSurname("");
+        setIsikukood("");
+        setDriverLicenseNumber("");
+        setAddress("");
+        setEmail("");
+        setPhone("");
+    }
+
+    const [addRequestStatus, setAddRequestStatus] = useState("idle");
+
+    const canSave = [name, surname, isikukood, driverLicenseNumber, address, email, phone].every(Boolean) && addRequestStatus === "idle";
+
+    const onSaveCustomer = () => {
+        if (canSave) {
+            try {
+                setAddRequestStatus("pending");
+                dispatch(
+                    addNewCustomer({
+                        id: nanoid(),
+                        name,
+                        surname,
+                        isikukood,
+                        driverLicenseNumber,
+                        address,
+                        email,
+                        phone,
+                        addedAt: getFormattedDate()
+                    })
+                ).unwrap()
+                clearInput();
+                navigate("/customers");
+            } catch (error) {
+                console.error("Failed to save the customer", error);
+            } finally {
+                setAddRequestStatus("idle");
+            }
+        }
+    }
+
     return (
         <main className="NewCustomer">
             <h2>NEW CUSTOMER FORM</h2>
@@ -11,6 +69,8 @@ const NewCustomerPage = () => {
                         id="name"
                         placeholder="Enter a name"
                         required
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -20,6 +80,8 @@ const NewCustomerPage = () => {
                         id="surname"
                         placeholder="Enter a surname"
                         required
+                        value={surname}
+                        onChange={(event) => setSurname(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -29,6 +91,8 @@ const NewCustomerPage = () => {
                         id="isikukood"
                         placeholder="Enter a isikukood"
                         required
+                        value={isikukood}
+                        onChange={(event) => setIsikukood(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -38,6 +102,8 @@ const NewCustomerPage = () => {
                         id="driverLicenseNumber"
                         placeholder="Enter a driver license number"
                         required
+                        value={driverLicenseNumber}
+                        onChange={(event) => setDriverLicenseNumber(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -47,6 +113,8 @@ const NewCustomerPage = () => {
                         id="address"
                         placeholder="Enter an address"
                         required
+                        value={address}
+                        onChange={(event) => setAddress(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -56,6 +124,8 @@ const NewCustomerPage = () => {
                         id="email"
                         placeholder="Enter an email"
                         required
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
                     />
                 </div>
                 <div className="inputWrap">
@@ -65,11 +135,13 @@ const NewCustomerPage = () => {
                         id="phone"
                         placeholder="Enter a phone"
                         required
+                        value={phone}
+                        onChange={(event) => setPhone(event.target.value)}
                     />
                 </div>
 
                 <div>
-                    <button type="submit">ADD NEW CUSTOMER TO THE DATABASE</button>
+                    <button disabled={!canSave} type="button" onClick={onSaveCustomer}>ADD NEW CUSTOMER TO THE DATABASE</button>
                 </div>
             </form>
         </main>
