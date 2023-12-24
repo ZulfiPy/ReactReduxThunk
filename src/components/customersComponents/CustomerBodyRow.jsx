@@ -1,4 +1,24 @@
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteCustomer } from "../../features/customersSlice";
+
 const CustomerBodyRow = ({ customer }) => {
+    const dispatch = useDispatch();
+    const [requestStatus, setRequestStatus] = useState("idle")
+
+    const onDeleteCustomer = () => {
+        try {
+            setRequestStatus("pending");
+            dispatch(
+                deleteCustomer({ id: customer.id })
+            ).unwrap()
+        } catch (error) {
+            console.error("Error occured", error);
+        } finally {
+            setRequestStatus("idle");
+        }
+    }
+
     return (
         <tr>
             <td>{customer.name}</td>
@@ -18,6 +38,7 @@ const CustomerBodyRow = ({ customer }) => {
                 <button
                     type="button"
                     className="deleteButton"
+                    onClick={onDeleteCustomer}
                 >DELETE</button>
             </td>
 
