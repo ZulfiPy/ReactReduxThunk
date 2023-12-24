@@ -9,7 +9,7 @@ const ModulesBox = () => {
         <main className="ModulesContainer">
 
             <div className="ModuleRow">
-                <div className="Module" onClick={() => navigate("customers")}>
+                <div className="Module" onClick={() => navigate("customer_module")}>
                     <h2>CUSTOMERS</h2>
                     <FontAwesomeIcon icon={faUsersBetweenLines} size="2xl" />
                 </div>
