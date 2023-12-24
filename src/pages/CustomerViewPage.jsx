@@ -19,6 +19,7 @@ const CustomerViewPage = () => {
                 deleteCustomer({ id: customer.id })
             ).unwrap();
             navigate("/customers");
+            console.log(requestStatus);
         } catch (error) {
             console.error("Error occured", error);
         } finally {
