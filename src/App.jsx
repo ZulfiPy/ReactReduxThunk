@@ -2,7 +2,8 @@ import Home from "./components/Home"
 import Layout from "./Layout";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import CustomerPage from "./pages/CustomersPage";
+import CustomersModule from "./pages/CustomersModule";
+import CustomersPage from "./pages/CustomersPage";
 import NewCustomerPage from "./pages/NewCustomerPage";
 import CustomerViewPage from "./pages/CustomerViewPage";
 import CustomerEditPage from "./pages/CustomerEditPage";
@@ -24,9 +25,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />}/>
-          <Route path="customers" element={<CustomerPage />}/>
-          <Route path="customer">
-            <Route index element={<NewCustomerPage />}/>
+          <Route path="customer_module">
+            <Route index element={<CustomersModule />}/>
+            <Route path="customers" element={<CustomersPage />}/>
+            <Route path="customer" element={<NewCustomerPage />}/>
             <Route path="view/:isikukood" element={<CustomerViewPage />}/>
             <Route path="edit/:isikukood" element={<CustomerEditPage />}/>
           </Route>
