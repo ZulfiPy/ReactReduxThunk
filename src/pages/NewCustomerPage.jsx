@@ -31,11 +31,11 @@ const NewCustomerPage = () => {
 
     const canSave = [name, surname, isikukood, driverLicenseNumber, address, email, phone].every(Boolean) && addRequestStatus === "idle";
 
-    const onSaveCustomer = () => {
+    const onSaveCustomer = async () => {
         if (canSave) {
             try {
                 setAddRequestStatus("pending");
-                dispatch(
+                await dispatch(
                     addNewCustomer({
                         id: nanoid(),
                         name,
