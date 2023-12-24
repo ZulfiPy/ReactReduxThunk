@@ -30,6 +30,17 @@ export const deleteCustomer = createAsyncThunk('customers/deleteCustomer', async
     }
 })
 
+export const updateCustomer = createAsyncThunk('customers/updateCustomer', async (customerData) => {
+    const { id } = customerData;
+    console.log(id)
+    try {
+        const response = await axios.put(`${CUSTOMERS_URL}/${id}`, customerData);
+        return response.data;
+    } catch (error) {
+        return error.message
+    }
+})
+
 export const customersSlice = createSlice({
     name: "customers",
     initialState,
@@ -55,12 +66,24 @@ export const customersSlice = createSlice({
             })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 if (!action.payload?.id) {
-                    console.log("Delete coult not complete");
+                    console.log("Delete could not complete");
                     console.log(action.payload);
-                    return
+                    return;
                 }
                 const { id } = action.payload;
                 state.customers = state.customers.filter(customer => customer.id !== id);
+            })
+            .addCase(updateCustomer.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    console.log("Update could not complete");
+                    console.log(action.payload);
+                    return;
+                }
+                const { id } = action.payload;
+                const index = state.customers.findIndex(customer => customer.id === id)
+                if (index !== -1) {
+                    state.customers[index] = action.payload;
+                }
             })
     }
 })
