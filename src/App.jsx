@@ -4,6 +4,8 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import CustomerPage from "./pages/CustomersPage";
 import NewCustomerPage from "./pages/NewCustomerPage";
+import CustomerViewPage from "./pages/CustomerViewPage";
+import CustomerEditPage from "./pages/CustomerEditPage";
 import VehiclesPage from "./pages/VehiclesPage";
 import DiscountPage from "./pages/DiscountPage";
 import InsurancePage from "./pages/InsurancePage";
@@ -25,6 +27,8 @@ function App() {
           <Route path="customers" element={<CustomerPage />}/>
           <Route path="customer">
             <Route index element={<NewCustomerPage />}/>
+            <Route path="view/:isikukood" element={<CustomerViewPage />}/>
+            <Route path="edit/:isikukood" element={<CustomerEditPage />}/>
           </Route>
           <Route path="vehicles" element={<VehiclesPage />}/>
           <Route path="discount" element={<DiscountPage />}/>
