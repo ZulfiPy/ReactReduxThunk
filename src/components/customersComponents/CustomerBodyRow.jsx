@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { deleteCustomer } from "../../features/customersSlice";
 
 const CustomerBodyRow = ({ customer }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [requestStatus, setRequestStatus] = useState("idle")
 
     const onDeleteCustomer = () => {
@@ -32,6 +34,7 @@ const CustomerBodyRow = ({ customer }) => {
                 <button
                     type="button"
                     className="viewButton"
+                    onClick={() => navigate(`/customer/view/${customer.isikukood}`)}
                 >VIEW</button>
             </td>
             <td>
