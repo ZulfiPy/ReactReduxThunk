@@ -10,13 +10,21 @@ const initialState = {
 }
 
 export const fetchCustomers = createAsyncThunk('customers/fetchCustomers', async () => {
-    const response = await axios.get(CUSTOMERS_URL);
-    return response.data;
+    try {
+        const response = await axios.get(CUSTOMERS_URL);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.message);
+    }
 })
 
 export const addNewCustomer = createAsyncThunk('customers/addNewCustomer', async (newCustomer) => {
-    const response = await axios.post(CUSTOMERS_URL, newCustomer);
-    return response.data;
+    try {
+        const response = await axios.post(CUSTOMERS_URL, newCustomer);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.message);
+    }
 })
 
 export const deleteCustomer = createAsyncThunk('customers/deleteCustomer', async (customerData) => {
@@ -24,9 +32,9 @@ export const deleteCustomer = createAsyncThunk('customers/deleteCustomer', async
     try {
         const response = await axios.delete(`${CUSTOMERS_URL}/${id}`);
         if (response?.status === 200) return customerData;
-        return `${response?.status}: ${response?.statusText}`;
+        throw new  Error(`${response?.status}: ${response?.statusText}`);
     } catch (error) {
-        return error.message
+        throw new Error(error.message);
     }
 })
 
@@ -35,9 +43,10 @@ export const updateCustomer = createAsyncThunk('customers/updateCustomer', async
     console.log(id)
     try {
         const response = await axios.put(`${CUSTOMERS_URL}/${id}`, customerData);
-        return response.data;
+        if(response?.status === 200) return response.data;
+        throw new  Error(`${response?.status}: ${response?.statusText}`);
     } catch (error) {
-        return error.message
+        throw new Error(error.message);
     }
 })
 
@@ -49,8 +58,8 @@ export const customersSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(fetchCustomers.pending, (state, action) => {
-            state.status = 'loading';
+            .addCase(fetchCustomers.pending, (state) => {
+                state.status = 'loading';
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -61,8 +70,19 @@ export const customersSlice = createSlice({
                 state.error = action.error.message;
                 state.customers = [];
             })
+            .addCase(addNewCustomer.pending, (state) => {
+                state.status = "loading";
+            })
             .addCase(addNewCustomer.fulfilled, (state, action) => {
+                state.status = "succeeded";
                 state.customers.push(action.payload);
+            })
+            .addCase(addNewCustomer.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(deleteCustomer.pending, (state) => {
+                state.status = "loading";
             })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 if (!action.payload?.id) {
@@ -71,7 +91,15 @@ export const customersSlice = createSlice({
                     return;
                 }
                 const { id } = action.payload;
+                state.status = "succeeded";
                 state.customers = state.customers.filter(customer => customer.id !== id);
+            })
+            .addCase(deleteCustomer.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(updateCustomer.pending, (state) => {
+                state.status = "loading";
             })
             .addCase(updateCustomer.fulfilled, (state, action) => {
                 if (!action.payload?.id) {
@@ -82,8 +110,13 @@ export const customersSlice = createSlice({
                 const { id } = action.payload;
                 const index = state.customers.findIndex(customer => customer.id === id)
                 if (index !== -1) {
+                    state.status = "succeeded";
                     state.customers[index] = action.payload;
                 }
+            })
+            .addCase(updateCustomer.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
             })
     }
 })
