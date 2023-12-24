@@ -19,6 +19,17 @@ export const addNewCustomer = createAsyncThunk('customers/addNewCustomer', async
     return response.data;
 })
 
+export const deleteCustomer = createAsyncThunk('customers/deleteCustomer', async (customerData) => {
+    const { id } = customerData;
+    try {
+        const response = await axios.delete(`${CUSTOMERS_URL}/${id}`);
+        if (response?.status === 200) return customerData;
+        return `${response?.status}: ${response?.statusText}`;
+    } catch (error) {
+        return error.message
+    }
+})
+
 export const customersSlice = createSlice({
     name: "customers",
     initialState,
@@ -40,8 +51,16 @@ export const customersSlice = createSlice({
                 state.customers = [];
             })
             .addCase(addNewCustomer.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.customers.push(action.payload);
+            })
+            .addCase(deleteCustomer.fulfilled, (state, action) => {
+                if (!action.payload?.id) {
+                    console.log("Delete coult not complete");
+                    console.log(action.payload);
+                    return
+                }
+                const { id } = action.payload;
+                state.customers = state.customers.filter(customer => customer.id !== id);
             })
     }
 })
