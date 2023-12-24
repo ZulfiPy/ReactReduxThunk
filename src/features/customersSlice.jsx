@@ -1,7 +1,7 @@
-import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-const CUSTOMERS_URL = 'http://localhost:3500/customers';
+const CUSTOMERS_URL = "http://localhost:3500/customers";
 
 const initialState = {
     customers: [],
@@ -11,6 +11,11 @@ const initialState = {
 
 export const fetchCustomers = createAsyncThunk('customers/fetchCustomers', async () => {
     const response = await axios.get(CUSTOMERS_URL);
+    return response.data;
+})
+
+export const addNewCustomer = createAsyncThunk('customers/addNewCustomer', async (newCustomer) => {
+    const response = await axios.post(CUSTOMERS_URL, newCustomer);
     return response.data;
 })
 
@@ -33,6 +38,10 @@ export const customersSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
                 state.customers = [];
+            })
+            .addCase(addNewCustomer.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.customers.push(action.payload);
             })
     }
 })
